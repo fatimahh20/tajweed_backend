@@ -5,9 +5,10 @@ __pycache__/
 venv/
 .venv/
 
-data/All_Audio/
-*.mp3
-*.wav
+data/All_Audio/*.mp3
+data/All_Audio/*.wav  
+
+
 
 !data/All_Audio/s2001.mp3
 !data/All_Audio/s2010.mp3
