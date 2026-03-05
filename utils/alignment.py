@@ -17,19 +17,16 @@ if hasattr(os, 'add_dll_directory'):
     os.add_dll_directory(espeak_path)
 #----------------------------------------------------------
 
-# Define the absolute path to your eSpeak installation
+# Define the absolute path to your eSpeak installatio
 import os
 
-# Define paths clearly
-ESPEAK_PATH = r"C:\Program Files\eSpeak NG"
-DATA_PATH = os.path.join(ESPEAK_PATH, "espeak-ng-data")
-
-# Set these variables BEFORE importing anything else
-os.environ["PHONEMIZER_ESPEAK_PATH"] = ESPEAK_PATH
-os.environ["PHONEMIZER_ESPEAK_LIBRARY"] = os.path.join(ESPEAK_PATH, "libespeak-ng.dll")
-os.environ["PHONEMIZER_ESPEAK_DATA"] = DATA_PATH  # This fixes the phontab error
-os.environ["ESPEAK_DATA_PATH"] = ESPEAK_PATH
-
+# Only set Windows paths if on Windows
+if os.name == 'nt':
+    from phonemizer.backend.espeak.wrapper import EspeakWrapper
+    library_path = r'C:\Program Files\eSpeak NG\libespeak-ng.dll'
+    EspeakWrapper.set_library(library_path)
+    os.environ["PHONEMIZER_ESPEAK_PATH"] = r"C:\Program Files\eSpeak NG"
+    os.environ["PHONEMIZER_ESPEAK_LIBRARY"] = r"C:\Program Files\eSpeak NG\libespeak-ng.dll"
 MODEL_ID = "facebook/wav2vec2-xlsr-53-espeak-cv-ft"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
