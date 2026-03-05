@@ -7,15 +7,12 @@ import utils.audio_handler as ah
 from utils.alignment import forced_align
 from utils.phoneme_analysis import get_full_analysis
 
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
-
-executor = ThreadPoolExecutor()
+import threading
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    loop = asyncio.get_event_loop()
-    await loop.run_in_executor(executor, ah.load_models)
+    t = threading.Thread(target=ah.load_models)
+    t.start()
     yield
 
 app = FastAPI(lifespan=lifespan)
