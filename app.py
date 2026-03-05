@@ -7,9 +7,15 @@ import utils.audio_handler as ah
 from utils.alignment import forced_align
 from utils.phoneme_analysis import get_full_analysis
 
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+executor = ThreadPoolExecutor()
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    ah.load_models() # Loads into the 'ah' namespace
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(executor, ah.load_models)
     yield
 
 app = FastAPI(lifespan=lifespan)
@@ -55,3 +61,9 @@ async def analyze_tajweed(word_id: str = Query(...), file: UploadFile = File(...
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         if os.path.exists(temp_path): os.remove(temp_path)
+
+
+    if __name__ == "__main__":
+     import uvicorn
+     port = int(os.environ.get("PORT", 8000))
+     uvicorn.run(app, host="0.0.0.0", port=port)   
