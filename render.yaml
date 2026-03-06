@@ -2,5 +2,5 @@ services:
   - type: web
     name: tajweed-backend
     runtime: python
-    buildCommand: "apt-get install -y espeak-ng && pip install -r requirements.txt"
+    buildCommand: "apt-get install -y espeak-ng libespeak-ng-dev && pip install -r requirements.txt"
     startCommand: "uvicorn app:app --host 0.0.0.0 --port $PORT"
