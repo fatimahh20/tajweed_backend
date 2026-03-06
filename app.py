@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Query, HTTPException
 from contextlib import asynccontextmanager
 import os, shutil, librosa, pandas as pd
+import uvicorn
 
 # --- IMPORT THE MODULE DIRECTLY ---
 import utils.audio_handler as ah
@@ -61,6 +62,5 @@ async def analyze_tajweed(word_id: str = Query(...), file: UploadFile = File(...
 
 
     if __name__ == "__main__":
-     import uvicorn
      port = int(os.environ.get("PORT", 8000))
-     uvicorn.run(app, host="0.0.0.0", port=port)   
+     uvicorn.run("main:app", host="0.0.0.0", port=port)   
